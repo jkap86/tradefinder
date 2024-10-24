@@ -190,6 +190,8 @@ export default function Home() {
           <button onClick={() => submitPlayers()}>Submit Players</button>
         </div>
       )}
+
+      <h1>ID: {identifier}</h1>
     </div>
   );
 }

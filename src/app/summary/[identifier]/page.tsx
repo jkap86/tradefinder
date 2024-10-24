@@ -43,7 +43,7 @@ const Summary: React.FC = () => {
       setSummary(response.data);
     };
     fetchSummary();
-  }, []);
+  }, [identifier]);
 
   return (
     <>
