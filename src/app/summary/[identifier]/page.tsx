@@ -5,6 +5,15 @@ import Allplayers from "@/lib/allplayers.json";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+interface summary {
+  selectedPlayers: string[];
+  user: {
+    rankings: { [key: string]: string | number }[];
+  };
+  leaguemate: {
+    rankings: { [key: string]: string | number }[];
+  };
+}
 const allplayers: { [key: string]: { [key: string]: string } } =
   Object.fromEntries(
     Allplayers.data.map((player_obj: { [key: string]: string }) => [
@@ -16,7 +25,11 @@ const allplayers: { [key: string]: { [key: string]: string } } =
 const Summary: React.FC = () => {
   const params = useParams();
   const identifier = params.identifier;
-  const [summary, setSummary] = useState<any>({});
+  const [summary, setSummary] = useState<summary>({
+    selectedPlayers: [],
+    user: { rankings: [] },
+    leaguemate: { rankings: [] },
+  });
   const [sortby, setSortby] = useState("L");
 
   useEffect(() => {
@@ -56,7 +69,10 @@ const Summary: React.FC = () => {
                 (r: any) => r.player === player_name
               );
               return {
-                sort: sortby === "L" ? lm_ranking.score : user_ranking.score,
+                sort:
+                  sortby === "L"
+                    ? lm_ranking?.score || 0
+                    : user_ranking?.score || 0,
                 row: (
                   <tr key={`${player_id}_${index}`}>
                     <td>{player_name}</td>
@@ -68,10 +84,7 @@ const Summary: React.FC = () => {
                 ),
               };
             })
-            .sort(
-              (a: { [key: string]: number }, b: { [key: string]: number }) =>
-                b.sort - a.sort
-            )
+            .sort((a, b) => (b.sort > a.sort ? 1 : -1))
             .map((row: any) => row.row)}
         </tbody>
       </table>

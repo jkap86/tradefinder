@@ -5,9 +5,13 @@ import axios from "axios";
 import { League, LeagueDetail, User } from "@/lib/types";
 import Allplayers from "@/lib/allplayers.json";
 
-const allplayers: any = Object.fromEntries(
-  Allplayers.data.map((player_obj) => [player_obj.player_id, player_obj])
-);
+const allplayers: { [key: string]: { [key: string]: string } } =
+  Object.fromEntries(
+    Allplayers.data.map((player_obj: { [key: string]: string }) => [
+      player_obj.player_id,
+      player_obj,
+    ])
+  );
 
 export default function Home() {
   const [username, setUsername] = useState("");
