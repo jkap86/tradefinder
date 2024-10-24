@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Allplayers from "@/lib/allplayers.json";
 
-const allplayers: any = Object.fromEntries(
-  Allplayers.data.map((player_obj: { [key: string]: any }) => [
-    player_obj.player_id,
-    player_obj,
-  ])
-);
+const allplayers: { [key: string]: { [key: string]: string } } =
+  Object.fromEntries(
+    Allplayers.data.map((player_obj: { [key: string]: string }) => [
+      player_obj.player_id,
+      player_obj,
+    ])
+  );
 
 interface Comp {
   player_id: string;
