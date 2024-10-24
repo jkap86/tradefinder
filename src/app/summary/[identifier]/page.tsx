@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const allplayers: any = Object.fromEntries(
-  Allplayers.data.map((player_obj: { [key: string]: any }) => [
+  Allplayers.data.map((player_obj: { [key: string]: string }) => [
     player_obj.player_id,
     player_obj,
   ])
