@@ -19,3 +19,59 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+h1 {
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+input {
+  color: black;
+}
+
+select {
+  color: black;
+}
+
+div.rosters {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+table.inline {
+  display: inline-table;
+  width: 35%;
+}
+
+div.comps {
+  width: 75%;
+  margin: auto;
+}
+div.comps > div {
+  display: flex;
+  border: 0.25rem ridge white;
+  margin: 1rem;
+}
+
+div.comps > div > div {
+  width: 50%;
+  border: 0.25rem solid white;
+  padding: 1rem;
+  margin: 0.5rem;
+}
+
+div.comps > div > div.winner {
+  border-color: green;
+}
+
+div.comps > div > div.loser {
+  border-color: red;
+}
+
+table.summary {
+  width: 75%;
+  text-align: center;
+}
