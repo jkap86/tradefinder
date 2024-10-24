@@ -6,7 +6,10 @@ import { useParams } from "next/navigation";
 import Allplayers from "@/lib/allplayers.json";
 
 const allplayers: any = Object.fromEntries(
-  Allplayers.data.map((player_obj) => [player_obj.player_id, player_obj])
+  Allplayers.data.map((player_obj: { [key: string]: any }) => [
+    player_obj.player_id,
+    player_obj,
+  ])
 );
 
 interface Comp {

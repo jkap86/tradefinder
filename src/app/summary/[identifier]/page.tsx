@@ -6,7 +6,10 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const allplayers: any = Object.fromEntries(
-  Allplayers.data.map((player_obj) => [player_obj.player_id, player_obj])
+  Allplayers.data.map((player_obj: { [key: string]: any }) => [
+    player_obj.player_id,
+    player_obj,
+  ])
 );
 
 const Summary: React.FC = () => {
