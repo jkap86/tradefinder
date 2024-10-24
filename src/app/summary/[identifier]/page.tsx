@@ -5,12 +5,13 @@ import Allplayers from "@/lib/allplayers.json";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const allplayers: any = Object.fromEntries(
-  Allplayers.data.map((player_obj: { [key: string]: string }) => [
-    player_obj.player_id,
-    player_obj,
-  ])
-);
+const allplayers: { [key: string]: { [key: string]: string } } =
+  Object.fromEntries(
+    Allplayers.data.map((player_obj: { [key: string]: string }) => [
+      player_obj.player_id,
+      player_obj,
+    ])
+  );
 
 const Summary: React.FC = () => {
   const params = useParams();
