@@ -68,7 +68,7 @@ const Leaguemate: React.FC = () => {
       (c) => c.player_id === player_id && c.player_id2 === player_id2
     );
 
-    comp_to_update &&
+    if (comp_to_update) {
       setComps((prevState) => [
         ...prevState.filter(
           (c) =>
@@ -79,6 +79,7 @@ const Leaguemate: React.FC = () => {
         ),
         { ...comp_to_update, winner },
       ]);
+    }
   };
 
   const generateRankings = async () => {
