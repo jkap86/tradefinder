@@ -3,7 +3,7 @@
 import axios from "axios";
 import Allplayers from "@/lib/allplayers.json";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 interface summary {
   selectedPlayers: string[];
@@ -63,10 +63,12 @@ const Summary: React.FC = () => {
             .map((player_id: string, index: number) => {
               const player_name = allplayers[player_id].full_name || player_id;
               const user_ranking = summary.user.rankings.find(
-                (r: any) => r.player === player_name
+                (r: { [key: string]: string | number }) =>
+                  r.player === player_name
               );
               const lm_ranking = summary.leaguemate.rankings.find(
-                (r: any) => r.player === player_name
+                (r: { [key: string]: string | number }) =>
+                  r.player === player_name
               );
               return {
                 sort:
@@ -85,7 +87,7 @@ const Summary: React.FC = () => {
               };
             })
             .sort((a, b) => (b.sort > a.sort ? 1 : -1))
-            .map((row: any) => row.row)}
+            .map((row: { row: ReactNode }) => row.row)}
         </tbody>
       </table>
     </>
