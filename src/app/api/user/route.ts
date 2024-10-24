@@ -30,15 +30,13 @@ export async function GET(req: NextRequest) {
             };
           }),
         });
-      } catch (err: any) {
-        console.log(err.message);
+      } catch {
         return NextResponse.json({ error: "Error fetching leagues..." });
       }
     } else {
       return NextResponse.json({ error: "Username not found..." });
     }
-  } catch (err: any) {
-    console.log(err.message);
+  } catch {
     return NextResponse.json({ error: "Error fetching user..." });
   }
 }
