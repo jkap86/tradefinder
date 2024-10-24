@@ -68,7 +68,10 @@ const Summary: React.FC = () => {
                 ),
               };
             })
-            .sort((a: any, b: any) => b.sort - a.sort)
+            .sort(
+              (a: { [key: string]: number }, b: { [key: string]: number }) =>
+                b.sort - a.sort
+            )
             .map((row: any) => row.row)}
         </tbody>
       </table>

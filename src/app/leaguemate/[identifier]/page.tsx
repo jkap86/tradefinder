@@ -37,7 +37,7 @@ const Leaguemate: React.FC = () => {
       });
 
       const comps = response.data
-        .map((player_obj: any) => {
+        .map((player_obj: { [key: string]: string }) => {
           return {
             ...player_obj,
             player_id: allplayers[player_obj.player_id].full_name,
@@ -48,7 +48,10 @@ const Leaguemate: React.FC = () => {
                 : allplayers[player_obj.winner].full_name,
           };
         })
-        .sort((a: any, b: any) => a.value_delta - b.value_delta);
+        .sort(
+          (a: { [key: string]: number }, b: { [key: string]: number }) =>
+            a.value_delta - b.value_delta
+        );
 
       setComps(comps);
     };
