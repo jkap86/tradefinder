@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Allplayers from "@/lib/allplayers.json";
+import Link from "next/link";
 
 const allplayers: { [key: string]: { [key: string]: string } } =
   Object.fromEntries(
@@ -94,6 +95,18 @@ const User: React.FC = () => {
 
   return (
     <>
+      <h1>
+        LEAGUEMATE LINK:
+        <Link href={`/leaguemate/${params.identifier}`}>
+          {window.location.href.replace("user", "leaguemate")}
+        </Link>
+        <br />
+        VIEW SUMMARY:
+        <Link href={`/summary/${params.identifier}`}>
+          {window.location.href.replace("user", "sumary")}
+        </Link>
+      </h1>
+      <br />
       <h1>User</h1>
 
       {comps.length > 0 && (

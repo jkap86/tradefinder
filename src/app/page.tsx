@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { League, LeagueDetail, User } from "@/lib/types";
 import Allplayers from "@/lib/allplayers.json";
+import { useRouter } from "next/navigation";
 
 const allplayers: { [key: string]: { [key: string]: string } } =
   Object.fromEntries(
@@ -14,6 +15,7 @@ const allplayers: { [key: string]: { [key: string]: string } } =
   );
 
 export default function Home() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [userLeagues, setUserLeagues] = useState<User>({
     user_id: "",
@@ -29,7 +31,6 @@ export default function Home() {
   });
   const [selectedRosterId, setSelectedRosterId] = useState(0);
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
-  const [identifier, setIdentifier] = useState("");
 
   const fetchUserLeagues = async () => {
     const response = await axios.get("/api/user", {
@@ -70,9 +71,7 @@ export default function Home() {
       roster_id: selectedRosterId,
     });
 
-    alert(response.data);
-
-    setIdentifier(response.data);
+    router.push(`/user/${response.data}`);
   };
 
   useEffect(() => {
@@ -190,8 +189,6 @@ export default function Home() {
           <button onClick={() => submitPlayers()}>Submit Players</button>
         </div>
       )}
-
-      <h1>ID: {identifier}</h1>
     </div>
   );
 }
