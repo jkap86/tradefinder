@@ -29,7 +29,17 @@ export default function Home() {
     name: "",
     rosters: [],
   });
-  const [selectedRosterId, setSelectedRosterId] = useState(0);
+  const [selectedLeaguemate, setSelectedLeaguemate] = useState<{
+    user_id: string;
+    username: string;
+    avatar: string;
+    roster_id: number;
+  }>({
+    user_id: "",
+    username: "",
+    avatar: "",
+    roster_id: 0,
+  });
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>([]);
 
   const fetchUserLeagues = async () => {
@@ -43,7 +53,6 @@ export default function Home() {
   };
 
   const fetchLeagueDetail = async (league_id: string) => {
-    setSelectedRosterId(0);
     const response = await axios.get("/api/league", {
       params: {
         league_id,
@@ -67,8 +76,11 @@ export default function Home() {
     const response = await axios.post("/api/submitplayers", {
       selectedPlayers,
       user_id: userLeagues.user_id,
+      username: userLeagues.username,
       league_id: leagueDetail.league_id,
-      roster_id: selectedRosterId,
+      league_name: leagueDetail.name,
+      lm_user_id: selectedLeaguemate.user_id,
+      lm_username: selectedLeaguemate.username,
     });
 
     router.push(`/user/${response.data}`);
@@ -76,15 +88,30 @@ export default function Home() {
 
   useEffect(() => {
     setSelectedPlayers([]);
-  }, [selectedRosterId]);
+  }, [selectedLeaguemate]);
 
   const userRoster = leagueDetail.rosters.find(
     (roster) => roster.owner_id === userLeagues.user_id
   );
 
   const lmRoster = leagueDetail.rosters.find(
-    (roster) => roster.roster_id === selectedRosterId
+    (roster) => roster.roster_id === selectedLeaguemate.roster_id
   );
+
+  const selectLeaguemate = (roster_id: number) => {
+    const lmRoster = leagueDetail.rosters.find(
+      (r) => r.roster_id === roster_id
+    );
+
+    if (lmRoster) {
+      setSelectedLeaguemate({
+        user_id: lmRoster.owner_id,
+        username: lmRoster.username,
+        avatar: lmRoster.avatar,
+        roster_id: roster_id,
+      });
+    }
+  };
 
   return (
     <div className="center">
@@ -123,8 +150,8 @@ export default function Home() {
         <div className="flex column">
           <label>Select a Leaguemate to trade with</label>
           <select
-            value={selectedRosterId}
-            onChange={(e) => setSelectedRosterId(parseInt(e.target.value))}
+            value={selectedLeaguemate.roster_id}
+            onChange={(e) => selectLeaguemate(parseInt(e.target.value))}
           >
             <option value="" hidden>
               Select Leaguemate
@@ -142,7 +169,7 @@ export default function Home() {
         </div>
       )}
 
-      {selectedRosterId > 0 && (
+      {selectedLeaguemate.roster_id > 0 && (
         <div className="rosters_container">
           <label>
             Select 10 Players that you are interested in trading for/away

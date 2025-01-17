@@ -4,7 +4,15 @@ import fs from "fs";
 export async function POST(req: NextRequest) {
   const formData = await req.json();
 
-  const { selectedPlayers, user_id, league_id, roster_id } = formData;
+  const {
+    selectedPlayers,
+    user_id,
+    username,
+    league_id,
+    league_name,
+    lm_user_id,
+    lm_username,
+  } = formData;
 
   const ktc_string = fs.readFileSync("./data/ktc.json", "utf-8");
 
@@ -48,18 +56,23 @@ export async function POST(req: NextRequest) {
 
   const db = JSON.parse(db_string);
 
-  const identifier = `${user_id}__${league_id}__${roster_id}`;
+  const identifier = `${user_id}__${league_id}__${lm_user_id}`;
 
   fs.writeFileSync(
     "./data/db.json",
     JSON.stringify({
       ...db,
       [identifier]: {
+        league: league_name,
         selectedPlayers,
         user: {
+          user_id,
+          username,
           comps,
         },
         leaguemate: {
+          user_id: lm_user_id,
+          username: lm_username,
           comps,
         },
       },

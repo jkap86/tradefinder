@@ -29,6 +29,7 @@ export type LeagueDetail = {
   name: string;
   rosters: {
     roster_id: number;
+    avatar: string;
     owner_id: string;
     username: string;
     players: string[];

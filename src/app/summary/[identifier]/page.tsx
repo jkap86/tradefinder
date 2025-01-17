@@ -7,11 +7,14 @@ import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 
 interface summary {
+  league: string;
   selectedPlayers: string[];
   user: {
+    username: string;
     rankings: { [key: string]: string | number }[];
   };
   leaguemate: {
+    username: string;
     rankings: { [key: string]: string | number }[];
   };
 }
@@ -27,9 +30,10 @@ const Summary: React.FC = () => {
   const params = useParams();
   const identifier = params.identifier;
   const [summary, setSummary] = useState<summary>({
+    league: "",
     selectedPlayers: [],
-    user: { rankings: [] },
-    leaguemate: { rankings: [] },
+    user: { username: "", rankings: [] },
+    leaguemate: { username: "", rankings: [] },
   });
   const [sortby, setSortby] = useState("L");
 
@@ -52,11 +56,13 @@ const Summary: React.FC = () => {
     <>
       <h1>Summary</h1>
       <div className="flex column">
-        User Selections
-        <Link href={`/leaguemate/${params.identifier}`}>
+        {summary.user.username} Selections
+        <Link href={`/user/${params.identifier}`}>
           {window.location.href.replace("summary", "user")}
         </Link>
-        Leaguemate Selections
+        <br />
+        <br />
+        {summary.leaguemate.username} Selections
         <Link href={`/leaguemate/${params.identifier}`}>
           {window.location.href.replace("summary", "leaguemate")}
         </Link>
@@ -64,11 +70,15 @@ const Summary: React.FC = () => {
       <table className="summary">
         <thead>
           <tr>
-            <th>Player</th>
-            <th onClick={() => setSortby("U")}>User Rank</th>
-            <th onClick={() => setSortby("U")}>User Score</th>
-            <th onClick={() => setSortby("L")}>Lm Rank</th>
-            <th onClick={() => setSortby("L")}>Lm Score</th>
+            <th rowSpan={2}>Player</th>
+            <th colSpan={2}>{summary.user.username}</th>
+            <th colSpan={2}>{summary.leaguemate.username}</th>
+          </tr>
+          <tr>
+            <th onClick={() => setSortby("U")}>Rank</th>
+            <th onClick={() => setSortby("U")}>Score</th>
+            <th onClick={() => setSortby("L")}>Rank</th>
+            <th onClick={() => setSortby("L")}>Score</th>
           </tr>
         </thead>
         <tbody>
@@ -77,11 +87,11 @@ const Summary: React.FC = () => {
               const player_name = allplayers[player_id].full_name || player_id;
               const user_ranking = summary.user.rankings.find(
                 (r: { [key: string]: string | number }) =>
-                  r.player === player_name
+                  r.player === player_id
               );
               const lm_ranking = summary.leaguemate.rankings?.find(
                 (r: { [key: string]: string | number }) =>
-                  r.player === player_name
+                  r.player === player_id
               );
               return {
                 sort:

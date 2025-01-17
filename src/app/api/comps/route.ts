@@ -15,9 +15,17 @@ export async function GET(req: NextRequest) {
 
   if (record) {
     if (type === "L") {
-      return NextResponse.json(record.leaguemate.comps);
+      return NextResponse.json({
+        league: record.league,
+        leaguemate: record.user.username,
+        ...record.leaguemate,
+      });
     } else if (type === "U") {
-      return NextResponse.json(record.user.comps);
+      return NextResponse.json({
+        league: record.league,
+        leaguemate: record.leaguemate.username,
+        ...record.user,
+      });
     }
   }
 

@@ -27,6 +27,9 @@ const Leaguemate: React.FC = () => {
   const params = useParams();
   const identifier = params.identifier;
   const [comps, setComps] = useState<Comp[]>([]);
+  const [username, setUsername] = useState("");
+  const [league, setLeague] = useState("");
+  const [leaguemate, setLeaguemate] = useState("");
 
   useEffect(() => {
     const fetchComps = async () => {
@@ -37,23 +40,14 @@ const Leaguemate: React.FC = () => {
         },
       });
 
-      const comps = response.data
-        .map((player_obj: { [key: string]: string }) => {
-          return {
-            ...player_obj,
-            player_id: allplayers[player_obj.player_id].full_name,
-            player_id2: allplayers[player_obj.player_id2].full_name,
-            winner:
-              player_obj.winner === ""
-                ? player_obj.winner
-                : allplayers[player_obj.winner].full_name,
-          };
-        })
-        .sort(
-          (a: { [key: string]: number }, b: { [key: string]: number }) =>
-            a.value_delta - b.value_delta
-        );
+      const comps = response.data.comps.sort(
+        (a: { [key: string]: number }, b: { [key: string]: number }) =>
+          a.value_delta - b.value_delta
+      );
 
+      setUsername(response.data.username);
+      setLeague(response.data.league);
+      setLeaguemate(response.data.leaguemate);
       setComps(comps);
     };
 
@@ -97,7 +91,11 @@ const Leaguemate: React.FC = () => {
 
   return (
     <>
-      <h1>Leaguemate</h1>
+      <h1>{username}</h1>
+
+      <h3>
+        {league} - {leaguemate}
+      </h3>
 
       {comps.length > 0 && (
         <div className="comps_container center">
@@ -134,7 +132,7 @@ const Leaguemate: React.FC = () => {
                         )
                       }
                     >
-                      {comp.player_id}
+                      {allplayers[comp.player_id]?.full_name || comp.player_id}
                     </div>
                     <div
                       className={
@@ -152,7 +150,8 @@ const Leaguemate: React.FC = () => {
                         )
                       }
                     >
-                      {comp.player_id2}
+                      {allplayers[comp.player_id2]?.full_name ||
+                        comp.player_id2}
                     </div>
                   </div>
                 );

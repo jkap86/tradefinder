@@ -62,6 +62,7 @@ export async function POST(req: NextRequest) {
       ...record,
       leaguemate: {
         ...record.leaguemate,
+        comps,
         rankings,
       },
     };
@@ -70,6 +71,7 @@ export async function POST(req: NextRequest) {
       ...record,
       user: {
         ...record.user,
+        comps,
         rankings,
       },
     };
