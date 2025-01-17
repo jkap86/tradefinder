@@ -2,9 +2,8 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Allplayers from "@/lib/allplayers.json";
-import Link from "next/link";
 
 const allplayers: { [key: string]: { [key: string]: string } } =
   Object.fromEntries(
@@ -24,6 +23,7 @@ interface Comp {
 }
 
 const User: React.FC = () => {
+  const router = useRouter();
   const params = useParams();
   const identifier = params.identifier;
   const [comps, setComps] = useState<Comp[]>([]);
@@ -84,18 +84,18 @@ const User: React.FC = () => {
   };
 
   const generateRankings = async () => {
-    const response = await axios.post("/api/generaterankings", {
+    await axios.post("/api/generaterankings", {
       identifier,
       comps,
       type: "U",
     });
 
-    console.log({ response });
+    router.push(`/summary/${identifier}`);
   };
 
   return (
     <>
-      <h1>
+      {/* <h1>
         LEAGUEMATE LINK:
         <Link href={`/leaguemate/${params.identifier}`}>
           {window.location.href.replace("user", "leaguemate")}
@@ -108,12 +108,21 @@ const User: React.FC = () => {
       </h1>
       <br />
       <h1>User</h1>
+*/}
+      <h1>User</h1>
 
       {comps.length > 0 && (
         <div className="comps_container center">
-          <h1>
-            {comps.filter((c) => c.winner === "").length}/{comps.length}
-          </h1>
+          <h3>
+            For each pair, select which player you prefer in this league. For
+            pairs where the KeepTradeCut Value gap is greater than 2000, the
+            player with the higher value has been selected, but you are able to
+            modify.
+          </h3>
+          <h3>
+            {comps.filter((c) => c.winner === "").length}/{comps.length}{" "}
+            Selections
+          </h3>
 
           <div className="comps center">
             {comps

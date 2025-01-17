@@ -4,6 +4,7 @@ import axios from "axios";
 import Allplayers from "@/lib/allplayers.json";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
+import Link from "next/link";
 
 interface summary {
   selectedPlayers: string[];
@@ -45,9 +46,21 @@ const Summary: React.FC = () => {
     fetchSummary();
   }, [identifier]);
 
+  console.log({ summary });
+
   return (
     <>
       <h1>Summary</h1>
+      <div className="flex column">
+        User Selections
+        <Link href={`/leaguemate/${params.identifier}`}>
+          {window.location.href.replace("summary", "user")}
+        </Link>
+        Leaguemate Selections
+        <Link href={`/leaguemate/${params.identifier}`}>
+          {window.location.href.replace("summary", "leaguemate")}
+        </Link>
+      </div>
       <table className="summary">
         <thead>
           <tr>
@@ -66,7 +79,7 @@ const Summary: React.FC = () => {
                 (r: { [key: string]: string | number }) =>
                   r.player === player_name
               );
-              const lm_ranking = summary.leaguemate.rankings.find(
+              const lm_ranking = summary.leaguemate.rankings?.find(
                 (r: { [key: string]: string | number }) =>
                   r.player === player_name
               );

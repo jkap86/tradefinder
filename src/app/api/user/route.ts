@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
       try {
         const leagues = await axios.get(
-          `https://api.sleeper.app/v1/user/${user_id}/leagues/nfl/2024`
+          `https://api.sleeper.app/v1/user/${user_id}/leagues/nfl/2025`
         );
 
         return NextResponse.json({

@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     value_delta: number;
   }[] = [];
 
-  const ktc_margin = 2500;
+  const ktc_margin = 2000;
 
   selectedPlayers.forEach((player_id: string, i: number) => {
     selectedPlayers.forEach((player_id2: string, j: number) => {

@@ -1,23 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: black;
+  color: white;
 }
 
 h1 {
@@ -30,6 +13,8 @@ h1 {
 
 input {
   color: black;
+  font-size: 1rem;
+  text-align: center;
 }
 
 select {
@@ -73,5 +58,22 @@ div.comps > div > div.loser {
 
 table.summary {
   width: 75%;
+  text-align: center;
+}
+
+div.flex {
+  display: flex;
+  width: fit-content;
+  margin: 3rem auto;
+}
+
+div.flex.column {
+  flex-direction: column;
+}
+
+div.flex button,
+div.flex select {
+  width: fit-content;
+  margin: auto;
   text-align: center;
 }

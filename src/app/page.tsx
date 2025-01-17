@@ -78,11 +78,20 @@ export default function Home() {
     setSelectedPlayers([]);
   }, [selectedRosterId]);
 
+  const userRoster = leagueDetail.rosters.find(
+    (roster) => roster.owner_id === userLeagues.user_id
+  );
+
+  const lmRoster = leagueDetail.rosters.find(
+    (roster) => roster.roster_id === selectedRosterId
+  );
+
   return (
     <div className="center">
       <h1>Trade Helper</h1>
 
-      <div>
+      <div className="flex column">
+        <label>Enter Your Sleeper Username</label>
         <input
           type="text"
           placeholder="username"
@@ -93,8 +102,12 @@ export default function Home() {
       </div>
 
       {userLeagues.user_id && (
-        <div>
+        <div className="flex column">
+          <label>Select League to find trades in</label>
           <select onChange={(e) => fetchLeagueDetail(e.target.value)}>
+            <option value="" hidden>
+              Select League
+            </option>
             {userLeagues.leagues.map((league: League) => {
               return (
                 <option key={league.league_id} value={league.league_id}>
@@ -107,11 +120,15 @@ export default function Home() {
       )}
 
       {leagueDetail.league_id && (
-        <div>
+        <div className="flex column">
+          <label>Select a Leaguemate to trade with</label>
           <select
             value={selectedRosterId}
             onChange={(e) => setSelectedRosterId(parseInt(e.target.value))}
           >
+            <option value="" hidden>
+              Select Leaguemate
+            </option>
             {leagueDetail.rosters
               .filter((roster) => roster.owner_id !== userLeagues.user_id)
               .map((roster) => {
@@ -127,14 +144,17 @@ export default function Home() {
 
       {selectedRosterId > 0 && (
         <div className="rosters_container">
+          <label>
+            Select 10 Players that you are interested in trading for/away
+          </label>
+          <br />
+          <br />
+          <em>{selectedPlayers.length} selected</em>
+          <br /> <br />
           <div className="rosters">
             <table className="inline players">
               <tbody>
-                {(
-                  leagueDetail.rosters.find(
-                    (roster) => roster.owner_id === userLeagues.user_id
-                  )?.players || []
-                ).map((player_id) => {
+                {(userRoster?.players || []).map((player_id) => {
                   return (
                     <tr key={player_id}>
                       <td>{allplayers[player_id]?.full_name || player_id}</td>
@@ -158,11 +178,7 @@ export default function Home() {
             </table>
             <table className="inline players">
               <tbody>
-                {(
-                  leagueDetail.rosters.find(
-                    (roster) => roster.roster_id === selectedRosterId
-                  )?.players || []
-                ).map((player_id) => {
+                {(lmRoster?.players || []).map((player_id) => {
                   return (
                     <tr key={player_id}>
                       <td>{allplayers[player_id]?.full_name || player_id}</td>
@@ -185,8 +201,17 @@ export default function Home() {
               </tbody>
             </table>
           </div>
-
-          <button onClick={() => submitPlayers()}>Submit Players</button>
+          <button
+            onClick={() => {
+              if (selectedPlayers.length === 10) {
+                submitPlayers();
+              } else {
+                alert(`Select ${10 - selectedPlayers.length} more players`);
+              }
+            }}
+          >
+            Submit Players
+          </button>
         </div>
       )}
     </div>

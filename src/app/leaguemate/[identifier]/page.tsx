@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Allplayers from "@/lib/allplayers.json";
 
 const allplayers: { [key: string]: { [key: string]: string } } =
@@ -23,6 +23,7 @@ interface Comp {
 }
 
 const Leaguemate: React.FC = () => {
+  const router = useRouter();
   const params = useParams();
   const identifier = params.identifier;
   const [comps, setComps] = useState<Comp[]>([]);
@@ -90,6 +91,8 @@ const Leaguemate: React.FC = () => {
     });
 
     console.log({ response });
+
+    router.push(`/summary/${identifier}`);
   };
 
   return (
@@ -98,9 +101,16 @@ const Leaguemate: React.FC = () => {
 
       {comps.length > 0 && (
         <div className="comps_container center">
-          <h1>
-            {comps.filter((c) => c.winner === "").length}/{comps.length}
-          </h1>
+          <h3>
+            For each pair, select which player you prefer in this league. For
+            pairs where the KeepTradeCut Value gap is greater than 2000, the
+            player with the higher value has been selected, but you are able to
+            modify.
+          </h3>
+          <h3>
+            {comps.filter((c) => c.winner === "").length}/{comps.length}{" "}
+            Selections
+          </h3>
 
           <div className="comps center">
             {comps
