@@ -91,7 +91,7 @@ export default function Home() {
   }, [selectedLeaguemate]);
 
   const userRoster = leagueDetail.rosters.find(
-    (roster) => roster.owner_id === userLeagues.user_id
+    (roster) => roster.user_id === userLeagues.user_id
   );
 
   const lmRoster = leagueDetail.rosters.find(
@@ -105,7 +105,7 @@ export default function Home() {
 
     if (lmRoster) {
       setSelectedLeaguemate({
-        user_id: lmRoster.owner_id,
+        user_id: lmRoster.user_id,
         username: lmRoster.username,
         avatar: lmRoster.avatar,
         roster_id: roster_id,
@@ -157,7 +157,7 @@ export default function Home() {
               Select Leaguemate
             </option>
             {leagueDetail.rosters
-              .filter((roster) => roster.owner_id !== userLeagues.user_id)
+              .filter((roster) => roster.user_id !== userLeagues.user_id)
               .map((roster) => {
                 return (
                   <option key={roster.roster_id} value={roster.roster_id}>
@@ -181,26 +181,93 @@ export default function Home() {
           <div className="rosters">
             <table className="inline players">
               <tbody>
-                {(userRoster?.players || []).map((player_id) => {
-                  return (
-                    <tr key={player_id}>
-                      <td>{allplayers[player_id]?.full_name || player_id}</td>
-                      <td>
-                        <input
-                          type="checkbox"
-                          disabled={
-                            !selectedPlayers.includes(player_id) &&
-                            selectedPlayers.length === 10
-                          }
-                          checked={selectedPlayers.includes(player_id)}
-                          onChange={(e) =>
-                            modifySelectedPlayers(player_id, e.target.checked)
-                          }
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                {(userRoster?.players || [])
+                  .sort((a, b) => {
+                    const getPositionValue = (player_id: string) => {
+                      const position =
+                        allplayers && allplayers[player_id]?.position;
+
+                      switch (position) {
+                        case "QB":
+                          return 1;
+                        case "RB":
+                          return 2;
+                        case "FB":
+                          return 2;
+                        case "WR":
+                          return 3;
+                        case "TE":
+                          return 4;
+                        default:
+                          return 5;
+                      }
+                    };
+
+                    return getPositionValue(a) - getPositionValue(b);
+                  })
+                  .map((player_id) => {
+                    return (
+                      <tr key={player_id}>
+                        <td>{allplayers[player_id]?.full_name || player_id}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            disabled={
+                              !selectedPlayers.includes(player_id) &&
+                              selectedPlayers.length === 10
+                            }
+                            checked={selectedPlayers.includes(player_id)}
+                            onChange={(e) =>
+                              modifySelectedPlayers(player_id, e.target.checked)
+                            }
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                {(userRoster?.draftpicks || [])
+                  .sort(
+                    (a, b) =>
+                      a.season - b.season ||
+                      a.round - b.round ||
+                      (a.order || 0) - (b.order || 0)
+                  )
+                  .map((pick) => {
+                    const pick_name = pick.order
+                      ? `${pick.season} ${
+                          pick.round
+                        }.${pick.order.toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                        })}`
+                      : `${pick.season} Round ${pick.round} ${`(${
+                          pick.original_user.username +
+                          (pick.original_user.username === "Orphan"
+                            ? `_${pick.roster_id}`
+                            : "")
+                        })`}`;
+                    return (
+                      <tr
+                        key={`${pick.season}_${pick.round}_${pick.roster_id}`}
+                      >
+                        <td>
+                          {pick_name.replace(`(${userRoster?.username})`, "")}
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            disabled={
+                              !selectedPlayers.includes(pick_name) &&
+                              selectedPlayers.length === 10
+                            }
+                            checked={selectedPlayers.includes(pick_name)}
+                            onChange={(e) =>
+                              modifySelectedPlayers(pick_name, e.target.checked)
+                            }
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
             <table className="inline players">
@@ -225,6 +292,49 @@ export default function Home() {
                     </tr>
                   );
                 })}
+                {(lmRoster?.draftpicks || [])
+                  .sort(
+                    (a, b) =>
+                      a.season - b.season ||
+                      a.round - b.round ||
+                      (a.order || 0) - (b.order || 0)
+                  )
+                  .map((pick) => {
+                    const pick_name = pick.order
+                      ? `${pick.season} ${
+                          pick.round
+                        }.${pick.order.toLocaleString("en-US", {
+                          minimumIntegerDigits: 2,
+                        })}`
+                      : `${pick.season} Round ${pick.round} ${`(${
+                          pick.original_user.username +
+                          (pick.original_user.username === "Orphan"
+                            ? `_${pick.roster_id}`
+                            : "")
+                        })`}`;
+                    return (
+                      <tr
+                        key={`${pick.season}_${pick.round}_${pick.roster_id}`}
+                      >
+                        <td>
+                          {pick_name.replace(`(${lmRoster?.username})`, "")}
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            disabled={
+                              !selectedPlayers.includes(pick_name) &&
+                              selectedPlayers.length === 10
+                            }
+                            checked={selectedPlayers.includes(pick_name)}
+                            onChange={(e) =>
+                              modifySelectedPlayers(pick_name, e.target.checked)
+                            }
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>

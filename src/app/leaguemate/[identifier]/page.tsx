@@ -112,7 +112,11 @@ const Leaguemate: React.FC = () => {
 
           <div className="comps center">
             {comps
-              .sort((a, b) => a.value_delta - b.value_delta)
+              .sort(
+                (a, b) =>
+                  (b.winner === "" ? 1 : 0) - (a.winner === "" ? 1 : 0) ||
+                  a.value_delta - b.value_delta
+              )
               .map((comp) => {
                 return (
                   <div key={`${comp.player_id}_${comp.player_id2}`}>

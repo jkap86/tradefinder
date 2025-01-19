@@ -35,17 +35,50 @@ export async function POST(req: NextRequest) {
         const player_id_value = ktc[player_id] || 0;
         const player_id2_value = ktc[player_id2] || 0;
 
+        let winner;
+        if (player_id.includes(" ") && player_id2.includes(" ")) {
+          const season1 = parseInt(player_id.split(" ")[0]);
+          const season2 = parseInt(player_id2.split(" ")[0]);
+
+          const pick1 = parseFloat(
+            player_id.split(" ")[
+              player_id.split(" ").length - (player_id.includes(".") ? 1 : 2)
+            ]
+          );
+          const pick2 = parseFloat(
+            player_id2.split(" ")[
+              player_id2.split(" ").length - (player_id2.includes(".") ? 1 : 2)
+            ]
+          );
+
+          if (pick1 > pick2 && season1 >= season2) {
+            winner = player_id2;
+          } else if (pick2 > pick1 && season2 >= season1) {
+            winner = player_id;
+          } else {
+            if (season1 > season2 && pick2 === pick1) {
+              winner = player_id2;
+            } else if (season2 > season1 && pick2 === pick1) {
+              winner = player_id;
+            } else {
+              winner = "";
+            }
+          }
+        } else {
+          winner =
+            player_id_value - ktc_margin > player_id2_value
+              ? player_id
+              : player_id2_value - ktc_margin > player_id_value
+              ? player_id2
+              : "";
+        }
+
         comps.push({
           player_id,
           player_id_value,
           player_id2,
           player_id2_value,
-          winner:
-            player_id_value - ktc_margin > player_id2_value
-              ? player_id
-              : player_id2_value - ktc_margin > player_id_value
-              ? player_id2
-              : "",
+          winner,
           value_delta: Math.abs(player_id_value - player_id2_value),
         });
       }

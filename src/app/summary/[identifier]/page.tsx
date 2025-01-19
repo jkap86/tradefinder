@@ -84,7 +84,7 @@ const Summary: React.FC = () => {
         <tbody>
           {(summary.selectedPlayers || [])
             .map((player_id: string, index: number) => {
-              const player_name = allplayers[player_id].full_name || player_id;
+              const player_name = allplayers[player_id]?.full_name || player_id;
               const user_ranking = summary.user.rankings.find(
                 (r: { [key: string]: string | number }) =>
                   r.player === player_id

@@ -13,8 +13,9 @@ export type User = {
 
 export type Roster = {
   roster_id: number;
-  owner_id: string;
+  user_id: string;
   players: string[];
+  draftpicks: Draftpick[];
 };
 
 export type Leaguemate = {
@@ -30,8 +31,75 @@ export type LeagueDetail = {
   rosters: {
     roster_id: number;
     avatar: string;
-    owner_id: string;
+    user_id: string;
     username: string;
     players: string[];
+    draftpicks: Draftpick[];
   }[];
+};
+
+export type SleeperLeague = {
+  league_id: string;
+  name: string;
+  avatar: string;
+  settings: { [key: string]: number };
+  season: string;
+};
+
+export type SleeperUser = {
+  user_id: string;
+  display_name: string;
+  avatar: string | null;
+};
+
+export type SleeperDraft = {
+  draft_id: string;
+  season: string;
+  draft_order: {
+    [key: string]: number;
+  };
+  last_picked: number | null;
+  status: string;
+  settings: {
+    rounds: number;
+    slots_k: number;
+  };
+};
+
+export type SleeperRoster = {
+  roster_id: number;
+  owner_id: string;
+  players: string[];
+  reserve?: string[];
+  settings: {
+    wins: number;
+    losses: number;
+    ties: number;
+    fpts: number;
+    fpts_decimal?: number;
+    fpts_against?: number;
+    fpts_against_decimal?: number;
+  };
+  starters: string[];
+  taxi?: string[];
+};
+
+export type SleeperDraftpick = {
+  season: string;
+  owner_id: number;
+  roster_id: number;
+  previous_owner_id: number;
+  round: number;
+};
+
+export type Draftpick = {
+  season: number;
+  round: number;
+  roster_id: number;
+  original_user: {
+    avatar: string;
+    user_id: string;
+    username: string;
+  };
+  order?: number | null;
 };
