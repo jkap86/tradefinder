@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export const getTeamDraftPicks = (
+const getTeamDraftPicks = (
   league: SleeperLeague,
   rosters: SleeperRoster[],
   users: SleeperUser[],
@@ -192,7 +192,7 @@ export const getTeamDraftPicks = (
   return draft_picks_league;
 };
 
-export const getRostersUsername = (
+const getRostersUsername = (
   rosters: SleeperRoster[],
   users: SleeperUser[],
   league_draftpicks_obj: { [key: string]: Draftpick[] }
