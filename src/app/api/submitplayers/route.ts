@@ -64,13 +64,15 @@ export async function POST(req: NextRequest) {
               winner = "";
             }
           }
-        } else {
+        } else if (!player_id.includes(" ") && !player_id2.includes(" ")) {
           winner =
             player_id_value - ktc_margin > player_id2_value
               ? player_id
               : player_id2_value - ktc_margin > player_id_value
               ? player_id2
               : "";
+        } else {
+          winner = "";
         }
 
         comps.push({
